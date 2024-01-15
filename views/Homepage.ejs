@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <script src="https://cdn.socket.io/4.7.3/socket.io.min.js" integrity="sha384-+miq58Ltmjm+SSP5g8Ok6dpMO/6R4n8xe/x1Yj0Bdb9kiEz25LTnWv/GZQTRQamg" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+        #chat {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: scroll;
+        }
+
+        .message {
+            background-color: #f0f0f0;
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+        }
+
+        #messageInput {
+            width: 60%;
+            padding: 8px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: rgb(255, 115, 0);
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello </h1>
+    <div id="chat"></div>
+    <input type="text" class="sendmsg" id="messageInput">
+    <button onclick="myFunc()">Send</button>
+
+    <script>
+        const userName = prompt('Enter your username');
+        document.querySelector('h1').innerHTML = `Hello ${userName}`;
+        const socket = io('http://localhost:4000');
+
+        socket.on('message', (data) => {
+            const chatDiv = document.getElementById('chat');
+            const msgTExt = document.createElement('div');
+            msgTExt.classList.add('message');
+            msgTExt.textContent = data;
+            chatDiv.appendChild(msgTExt);
+        });
+
+        const myFunc = () => {
+            const myInput = document.getElementById('messageInput');
+            const msg = myInput.value;
+
+            if (msg.trim() !== '') {
+                socket.emit('message',  `Message from ${userName}: ${msg}`);
+                myInput.value = '';  // Clear the input field
+            }
+        };
+    </script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Chat App</title>
+    <script 
+    src="https://cdn.socket.io/4.7.3/socket.io.min.js" integrity="sha384-+miq58Ltmjm+SSP5g8Ok6dpMO/6R4n8xe/x1Yj0Bdb9kiEz25LTnWv/GZQTRQamg" crossorigin="anonymous"></script>
+
+</head>
+<style>
+    body{
+        background-color: gray;
+    }
+    button{
+        width: 100px;
+        height: 40px;
+        background-color: rgb(168, 49, 5);
+        border-radius: 8px;
+        border: none;
+        font-size: 14px;
+    }
+    
+</style>
+<body>
+    <h1></h1>
+    <input class="sendMe" id="messageInput" type="text">
+    <button onclick="chatFunc()">Send</button>
+
+    <script>
+        const userName = prompt("What is your name")
+        document.querySelector("h1").innerHTML=`Hello ${ userName } welcome to my chat app`
+        const socket = io("http://localhost:4000")
+        socket.on("connection", (data)=> {
+            document.querySelector("h2").innerHTML = data
+
+        })
+            const chatFunc = ()=>{
+            const msgInput = document.getElementById('messageInput');
+            const msg = msgInput.value;
+
+            if (msg.trim() !== '') {
+                socket.emit('message', `Message from ${userName}: ${msg}`);
+                msgInput.value = '';  // Clear the input field
+            }
+        }
+    </script>
+    
+</body>
+</html> -->
